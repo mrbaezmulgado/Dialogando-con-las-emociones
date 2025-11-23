@@ -8,22 +8,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @Composable
-fun PantallaInicio(navController: NavController) {
+fun PantallaInicio(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Dialogando con la Emoción",
+            text = "🌈 Dialogando con la Emoción",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(30.dp))
+
+        Text(
+            text = "Un espacio seguro para expresar cómo te sientes.",
+            fontSize = 16.sp
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         Button(onClick = { navController.navigate("dialogo") }) {
             Text("Comenzar")
