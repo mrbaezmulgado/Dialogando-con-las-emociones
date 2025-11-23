@@ -3,18 +3,11 @@ package com.dialogandoemocion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +28,8 @@ fun DialogandoEmocionApp() {
 
     NavHost(navController = navController, startDestination = "inicio") {
 
-        // 1️⃣ Pantalla de Inicio
-        composable("inicio") {
-            PantallaInicio(navController)
-        }
+        composable("inicio") { PantallaInicio(navController) }
 
-        // 2️⃣ Pantalla donde el jugador escribe sus emociones
         composable("dialogo") {
             PantallaDialogo(
                 navController = navController,
@@ -49,29 +38,20 @@ fun DialogandoEmocionApp() {
             )
         }
 
-        // 3️⃣ Pantalla con información de la emoción detectada
         composable("info_emocion") {
-            PantallaInfoEmocion(
-                navController = navController,
-                emocion = ultimaEmocion.value
-            )
+            PantallaInfoEmocion(navController, ultimaEmocion.value)
         }
 
-        // 4️⃣ Pantalla de comentario del jugador
-        composable("comentario") {
-            PantallaComentario(navController)
-        }
+        composable("comentario") { PantallaComentario(navController) }
 
-        // 5️⃣ Pantalla de dibujo/actividad emocional
-        composable("dibujo") {
-            PantallaDibujo(navController)
-        }
+        composable("dibujo") { PantallaDibujo(navController) }
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// 1️⃣ PANTALLA INICIO
-//////////////////////////////////////////////////////////////////////////////
+}import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun PantallaInicio(navController: NavHostController) {
@@ -84,23 +64,18 @@ fun PantallaInicio(navController: NavHostController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Text("🌈 Dialogando con la Emoción", style = MaterialTheme.typography.headlineSmall)
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(Modifier.height(30.dp))
             Text("Un espacio seguro para expresar cómo te sientes.")
-
-            Spacer(modifier = Modifier.height(40.dp))
-
+            Spacer(Modifier.height(40.dp))
             Button(onClick = { navController.navigate("dialogo") }) {
                 Text("Empezar")
             }
         }
     }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// 2️⃣ PANTALLA DIÁLOGO PRINCIPAL
-//////////////////////////////////////////////////////////////////////////////
+}import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.TextStyle
 
 @Composable
 fun PantallaDialogo(
@@ -125,8 +100,7 @@ fun PantallaDialogo(
         ) {
 
             Text("Escribe cómo te sientes hoy:")
-
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
             BasicTextField(
                 value = texto,
@@ -136,7 +110,9 @@ fun PantallaDialogo(
                     .height(150.dp)
                     .padding(8.dp),
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground)
-            )Spacer(modifier = Modifier.height(20.dp))
+            )
+
+            Spacer(Modifier.height(20.dp))
 
             Button(onClick = {
                 val emocion = detectarEmocion(texto)
@@ -163,24 +139,23 @@ fun PantallaDialogo(
                 Text("Enviar emoción")
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
             Text(respuesta)
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(Modifier.height(40.dp))
 
             Button(onClick = { navController.navigate("info_emocion") }) {
                 Text("Ver más sobre mi emoción")
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
             Button(onClick = { navController.navigate("comentario") }) {
                 Text("Dejar comentario del juego")
             }
         }
     }
-}
-
-@Composable
+}@Composable
 fun PantallaInfoEmocion(navController: NavHostController, emocion: String) {
+
     val descripcion = when (emocion) {
         "triste" -> "La tristeza aparece cuando algo nos duele o perdemos algo importante."
         "ansioso" -> "La ansiedad te prepara para un riesgo, aunque a veces es exagerada."
@@ -199,14 +174,13 @@ fun PantallaInfoEmocion(navController: NavHostController, emocion: String) {
             Spacer(Modifier.height(20.dp))
             Text(descripcion)
             Spacer(Modifier.height(40.dp))
+
             Button(onClick = { navController.navigate("dialogo") }) {
                 Text("Volver")
             }
         }
     }
-}
-
-@Composable
+}@Composable
 fun PantallaComentario(navController: NavHostController) {
     var comentario by remember { mutableStateOf("") }
 
@@ -218,6 +192,7 @@ fun PantallaComentario(navController: NavHostController) {
         ) {
             Text("¿Qué te gustaría que agregáramos al juego?")
             Spacer(Modifier.height(20.dp))
+
             BasicTextField(
                 value = comentario,
                 onValueChange = { comentario = it },
@@ -227,6 +202,7 @@ fun PantallaComentario(navController: NavHostController) {
                     .padding(8.dp),
                 textStyle = TextStyle.Default
             )
+
             Spacer(Modifier.height(30.dp))
             Button(onClick = { navController.navigate("dialogo") }) {
                 Text("Enviar")
@@ -249,6 +225,7 @@ fun PantallaDibujo(navController: NavHostController) {
             Spacer(Modifier.height(20.dp))
             Text("Haz un dibujo de ti mismo y describe cómo te sientes.")
             Spacer(Modifier.height(40.dp))
+
             Button(onClick = { navController.navigate("dialogo") }) {
                 Text("Volver")
             }
