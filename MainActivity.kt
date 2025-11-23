@@ -136,4 +136,122 @@ fun PantallaDialogo(
                     .height(150.dp)
                     .padding(8.dp),
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground)
+            )Spacer(modifier = Modifier.height(20.dp))
+
+            Button(onClick = {
+                val emocion = detectarEmocion(texto)
+                ultimaEmocion.value = emocion
+
+                respuesta = when (emocion) {
+                    "triste" -> "Siento que estés triste. Estoy contigo."
+                    "ansioso" -> "La ansiedad pesa, pero no estás solo."
+                    "molesto" -> "Es válido enojarse. Hablemos de ello."
+                    "feliz" -> "¡Qué alegría sentirte así!"
+                    else -> "Gracias por compartir lo que sientes."
+                }
+
+                if (ultimaEmocion.value == emocion && emocion != "emocion_desconocida") {
+                    emocionRepetidaCount.value++
+                } else {
+                    emocionRepetidaCount.value = 1
+                }
+
+                if (emocionRepetidaCount.value >= 3) {
+                    navController.navigate("dibujo")
+                }
+            }) {
+                Text("Enviar emoción")
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(respuesta)
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Button(onClick = { navController.navigate("info_emocion") }) {
+                Text("Ver más sobre mi emoción")
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(onClick = { navController.navigate("comentario") }) {
+                Text("Dejar comentario del juego")
+            }
+        }
+    }
+}
+
+@Composable
+fun PantallaInfoEmocion(navController: NavHostController, emocion: String) {
+    val descripcion = when (emocion) {
+        "triste" -> "La tristeza aparece cuando algo nos duele o perdemos algo importante."
+        "ansioso" -> "La ansiedad te prepara para un riesgo, aunque a veces es exagerada."
+        "feliz" -> "La felicidad te da energía y motivación."
+        "molesto" -> "El enojo señala que algo te parece injusto."
+        else -> "Cada emoción tiene un mensaje importante."
+    }
+
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(20.dp)
+        ) {
+            Text("Tu emoción: $emocion", style = MaterialTheme.typography.headlineSmall)
+            Spacer(Modifier.height(20.dp))
+            Text(descripcion)
+            Spacer(Modifier.height(40.dp))
+            Button(onClick = { navController.navigate("dialogo") }) {
+                Text("Volver")
+            }
+        }
+    }
+}
+
+@Composable
+fun PantallaComentario(navController: NavHostController) {
+    var comentario by remember { mutableStateOf("") }
+
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(20.dp)
+        ) {
+            Text("¿Qué te gustaría que agregáramos al juego?")
+            Spacer(Modifier.height(20.dp))
+            BasicTextField(
+                value = comentario,
+                onValueChange = { comentario = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .padding(8.dp),
+                textStyle = TextStyle.Default
             )
+            Spacer(Modifier.height(30.dp))
+            Button(onClick = { navController.navigate("dialogo") }) {
+                Text("Enviar")
+            }
+        }
+    }
+}
+
+@Composable
+fun PantallaDibujo(navController: NavHostController) {
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Actividad desbloqueada 🎨")
+            Spacer(Modifier.height(20.dp))
+            Text("Haz un dibujo de ti mismo y describe cómo te sientes.")
+            Spacer(Modifier.height(40.dp))
+            Button(onClick = { navController.navigate("dialogo") }) {
+                Text("Volver")
+            }
+        }
+    }
+}
