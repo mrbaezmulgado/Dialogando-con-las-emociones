@@ -1,14 +1,3 @@
-package com.dialogandoemocion
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-
 @Composable
 fun PantallaDialogo(
     navController: NavController,
@@ -22,7 +11,10 @@ fun PantallaDialogo(
         return emociones.firstOrNull { texto.contains(it, ignoreCase = true) } ?: "emocion_desconocida"
     }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(modifier = Modifier
+        .padding(16.dp)
+        .fillMaxSize()
+    ) {
         Text(
             text = "Escribe cómo te sientes:",
             style = MaterialTheme.typography.titleMedium
@@ -59,10 +51,41 @@ fun PantallaDialogo(
         Text("Historial del diálogo:")
         Spacer(modifier = Modifier.height(10.dp))
 
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
             items(listaEmociones) { emocion ->
-                Text("- $emocion")
-                Spacer(modifier = Modifier.height(6.dp))
+                if (emocion.startsWith("Tú:")) {
+                    // Mensaje del usuario
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                    ) {
+                        Text(
+                            text = emocion,
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                } else {
+                    // Mensaje del sistema
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                    ) {
+                        Text(
+                            text = emocion,
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
             }
         }
     }
