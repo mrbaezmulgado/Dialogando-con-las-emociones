@@ -10,13 +10,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun PantallaDialogo(navController: NavController) {
-
+fun PantallaDialogo(
+    navController: NavController,
+    onEmocionDetectada: (String) -> Unit = {}
+) {
     var textoUsuario by remember { mutableStateOf("") }
     val listaEmociones = remember { mutableStateListOf<String>() }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    fun detectarEmocion(texto: String): String {
+        val emociones = listOf("triste", "ansioso", "feliz", "molesto", "solo", "cansado")
+        return emociones.firstOrNull { texto.contains(it, ignoreCase = true) } ?: "emocion_desconocida"
+    }
 
+    Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Escribe cómo te sientes:",
             style = MaterialTheme.typography.titleMedium
@@ -36,7 +42,10 @@ fun PantallaDialogo(navController: NavController) {
         Button(
             onClick = {
                 if (textoUsuario.isNotEmpty()) {
+                    val emocionDetectada = detectarEmocion(textoUsuario)
                     listaEmociones.add("Tú: $textoUsuario")
+                    listaEmociones.add("Sistema: $emocionDetectada")
+                    onEmocionDetectada(emocionDetectada)
                     textoUsuario = ""
                 }
             },
