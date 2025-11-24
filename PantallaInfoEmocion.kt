@@ -1,6 +1,8 @@
 package com.dialogandoemocion
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,10 +22,13 @@ fun PantallaInfoEmocion(navController: NavController, emocion: String) {
         else -> "Cada emoción tiene un mensaje importante. ¡Escúchate!"
     }
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(20.dp)
+            .verticalScroll(scrollState),
         verticalArrangement = Arrangement.Top
     ) {
         Text(
@@ -40,4 +45,3 @@ fun PantallaInfoEmocion(navController: NavController, emocion: String) {
             Text("Volver")
         }
     }
-}
