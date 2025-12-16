@@ -19,7 +19,7 @@ fun PantallaInfoEmocion(navController: NavController, emocion: String) {
         "molesto" -> "El enojo señala que algo te parece injusto."
         "solo" -> "Sentirse solo es una señal de que necesitas conexión con otros."
         "cansado" -> "El cansancio indica que tu cuerpo o mente necesitan descanso."
-        "ansioso"-> "se refiere a un sintoma de tu cuerpo producido por algo inesperado."
+        
         else -> "Cada emoción tiene un mensaje importante. ¡Escúchate!"
     }
 
