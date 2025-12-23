@@ -12,3 +12,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+package com.dialogandoemocion
+
+import androidx.compose.runtime.Composable
+import com.dialogandoemocion.navigation.AppNavigation
+
+@Composable
+fun DialogandoEmocionApp() {
+    AppNavigation()
+}
